@@ -1,0 +1,338 @@
+﻿1. Project Setup and Planning
+Task
+	Subtasks
+	Assigned To
+	Priority
+	Status
+	1.1 Define Project Timeline
+	- Create a Gantt chart with milestones based on HLD. Set deadlines for each phase
+	Project Manager
+	High
+	Not Started
+	1.2 Setup Version Control
+	- Initialize Git repository. Define branching strategy (e.g., GitFlow)
+	Backend Devs
+	High
+	Not Started
+	1.3 Environment Setup
+	- Provision AWS EC2 instance. Install Spring Boot, PostgreSQL, and React Native tools
+	System Architect
+	High
+	Not Started
+	1.4 Requirements Validation
+	- Review HLD with stakeholders. Finalize scope with Business Analyst
+	Business Analyst
+	High
+	Not Started
+	________________
+
+
+2. Frontend Development (React Native App)
+Task
+	Subtasks
+	Assigned To
+	Priority
+	Status
+	2.1 Design Role-Based UIs
+	- Create Admin UI (full control).  Create Manager UI (monitoring).  Create Delivery Boy UI (logging)
+	Frontend Devs
+	High
+	Not Started
+	2.2 Implement Authentication
+	- Build login screen.  Integrate JWT token handling.  Role-based routing
+	Frontend Devs
+	High
+	Not Started
+	2.3 Delivery Workflow UI
+	- Screen for selecting delivery points.  Input fields for tanks and payments
+	Frontend Devs
+	Medium
+	Not Started
+	2.4 Reporting UI
+	- Dashboard for report requests.  PDF download functionality
+	Frontend Devs
+	Medium
+	Not Started
+	2.5 Notifications UI
+	- Popup alerts.  Dashboard banners for persistent notifications
+	Frontend Devs
+	Medium
+	Not Started
+	2.6 Splash Screen
+	- Design and implement Gas Agency branding splash screen
+	Frontend Devs
+	Low
+	Not Started
+	________________
+
+
+3. Backend Development (Spring Boot on AWS EC2)
+Task
+	Subtasks
+	Assigned To
+	Priority
+	Status
+	3.1 Setup Spring Boot Project
+	- Initialize project with Maven/Gradle.  Configure REST API structure
+	Backend Devs
+	High
+	Not Started
+	3.2 Authentication Module
+	- Implement Spring Security with JWT.  Password hashing (BCrypt).  Role-based access
+	Backend Devs
+	High
+	Not Started
+	3.3 User Management Module
+	- CRUD APIs for users (Admin creates Manager/Delivery Boy).  Role assignment logic
+	Backend Devs
+	High
+	Not Started
+	3.4 Inventory Management Module
+	- API to track 600 tanks (filled/unfilled).  Real-time stock count logic
+	Backend Devs
+	High
+	Not Started
+	3.5 Delivery Management Module
+	- APIs for delivery logging (point, tanks, timestamp).  Assignment and closure logic
+	Backend Devs
+	High
+	Not Started
+	3.6 Payment Tracking Module
+	- APIs for payment modes (cash, online, pending).  Pending balance calculation
+	Backend Devs
+	Medium
+	Not Started
+	3.7 Reporting Module
+	- Query PostgreSQL for reports.  Integrate PDF generation 
+	Backend Devs
+	Medium
+	Not Started
+	3.8 Notifications Module
+	- Logic for inventory discrepancies.  Pending payment alerts.  In-app notification API
+	Backend Devs
+	Medium
+	Not Started
+	________________
+
+
+4. Database Development (PostgreSQL)
+Task
+	Subtasks
+	Assigned To
+	Priority
+	Status
+	4.1 Schema Design
+	- Create tables: users, mt_*, live_inventory_stocks, daily_*, etc..  Define keys and indexes
+	System Architect/Backend Devs
+	High
+	Not Started
+	4.2 Relationships Implementation
+	- Set up foreign keys 
+	Backend Devs
+	High
+	Not Started
+	
+
+	
+
+	
+
+	
+
+	
+
+	4.3 Indexing for Performance
+	- Add indexes on daily_delivery, payments for fast lookups
+	Backend Devs
+	Medium
+	Not Started
+	________________
+
+
+5. Integration and API Development
+Task
+	Subtasks
+	Assigned To
+	Priority
+	Status
+	5.1 REST API Development
+	- Define endpoints (e.g., /auth/login, /delivery/log, /report/generate)
+	Backend Devs
+	High
+	Not Started
+	5.2 Frontend-Backend Integration
+	- Connect React Native to APIs.  Test data flow (e.g., login, delivery submission)
+	Frontend/Backend Devs
+	High
+	Not Started
+	5.3 JPA/Hibernate Configuration
+	- Map entities to tables.  Test CRUD operations
+	Backend Devs
+	High
+	Not Started
+	________________
+
+
+6. Security Implementation
+Task
+	Subtasks
+	Assigned To
+	Priority
+	Status
+	6.1 JWT Security
+	- Configure JWT token issuance.  Set short-lived tokens with refresh mechanism
+	Backend Devs
+	High
+	Not Started
+	6.2 HTTPS Setup
+	- Enable HTTPS on EC2.  Configure SSL certificate
+	System Architect
+	High
+	Not Started
+	
+
+	
+
+	
+
+	
+
+	
+
+	________________
+
+
+7. Deployment and Infrastructure
+Task
+	Subtasks
+	Assigned To
+	Priority
+	Status
+	7.1 Deploy Backend to EC2
+	- Package Spring Boot app.  Deploy to EC2 instance
+	Backend Devs/System Architect
+	High
+	Not Started
+	7.2 Database Deployment
+	- Set up PostgreSQL on EC2 (or RDS if chosen).  Load initial schema
+	System Architect
+	High
+	Not Started
+	7.3 Mobile App Build
+	- Build React Native app for iOS/Android.  Test on emulators/devices
+	Frontend Devs
+	High
+	Not Started
+	________________
+
+
+8. Testing
+Task
+	Subtasks
+	Assigned To
+	Priority
+	Status
+	8.1 Unit Testing
+	- Test backend APIs (e.g., authentication, delivery).  Test frontend components
+	Backend/Frontend Devs
+	High
+	Not Started
+	8.2 Integration Testing
+	- Test end-to-end flow (login → delivery → report).  Validate notifications
+	Backend/Frontend Devs
+	High
+	Not Started
+	8.3 Security Testing
+	- Test JWT token security.  Validate HTTPS encryption
+	System Architect
+	High
+	Not Started
+	8.4 Performance Testing
+	- Test report generation speed.  Validate pagination on large datasets
+	Backend Devs
+	Medium
+	Not Started
+	________________
+
+
+9. Monitoring and Maintenance
+Task
+	Subtasks
+	Assigned To
+	Priority
+	Status
+	9.1 Logging Setup
+	- Configure Spring Boot logs on EC2.  Set up log rotation
+	Backend Devs
+	Medium
+	Not Started
+	9.2 Health Checks
+	- Implement Spring Actuator endpoints (/actuator/health)
+	Backend Devs
+	Medium
+	Not Started
+	
+
+	
+
+	
+
+	
+
+	
+
+	________________
+
+
+10. Documentation and Handover
+Task
+	Subtasks
+	Assigned To
+	Priority
+	Status
+	
+
+	
+
+	
+
+	
+
+	
+
+	10.1 User Manual
+	- Create guide for Admin, Manager, Delivery Boy roles
+	Business Analyst
+	Medium
+	Not Started
+	10.2 Deployment Guide
+	- Document EC2 setup, app deployment, and database config
+	System Architect
+	Medium
+	Not Started
+	10.3 Final Review
+	- Present completed app to stakeholders.  Address feedback
+	Project Manager
+	High
+	Not Started
+	
+
+
+
+Note : At Runtime some point will be added in this file.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

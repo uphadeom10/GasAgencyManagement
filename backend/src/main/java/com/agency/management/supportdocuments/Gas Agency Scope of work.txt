@@ -1,0 +1,64 @@
+﻿Project Overview
+* Objective: Develop a mobile application for a gas agency owner to manage daily gas tank sales, track deliveries, monitor filled/unfilled tanks, handle payments, and generate reports.
+* Target Users:
+   * Gas agency owner/admin (for dashboard and reports).
+   * Delivery boys (for managing deliveries and payments).
+   * Manager monitors all the , can add points, delivery boys.
+* Core Features: Inventory tracking, delivery management, payment processing, and daily reporting.
+* Tech Stack:
+   * Frontend: React Native (cross-platform mobile app for Android/iOS).
+   * Backend: Spring Boot (RESTful APIs for business logic and database interaction).
+   * Hosting: AWS (Ec2)
+________________
+
+
+Key Functionalities
+1. Inventory Management
+* Track total gas tanks: 600 tanks daily (fixed capacity).
+* Segregate filled and unfilled tanks:
+   * Filled tanks: Ready for delivery.
+   * Unfilled tanks: Returned by delivery boys or customers.
+* Real-time updates on tank status (e.g., filled, delivered, returned unfilled).
+* Alert if the total count (filled + unfilled) deviates from 600.
+2. Delivery Boy Module
+* Login: Secure login for each delivery boy (unique ID/password).
+* Delivery Points:
+   * Pre-registered delivery points in a master list (e.g., Point A, Point B, etc.).
+   * Delivery boy selects a point from the list.
+* Gas Tank Management at Points:
+   * Input number of filled gas tanks delivered to the point.
+   * Input number of unfilled gas tanks collected from the point.
+* Payment Collection:
+   * Record mode of payment:
+      * Cash.
+      * Online (UPI, card, etc.).
+      * Pending balance (option for customers to defer payment).
+   * If pending balance is selected, save the amount owed and notify admin.
+* Form Submission:
+   * Save delivery details (point, tanks delivered, tanks collected, payment info).
+   * Sync data to the admin dashboard in real-time or on submission.
+3. Admin Dashboard
+* Overview:
+   * Total filled and unfilled tanks (daily status).
+   * Number of deliveries completed.
+   * Pending payments summary.
+* Delivery Boy Tracking:
+   * View each delivery boy’s activities (e.g., deliveries made, tanks collected, payments recorded).
+* Point-wise Insights:
+   * Gas tanks delivered and collected per point.
+   * Payment status per point (cash, online, pending).
+* Notifications: Alerts for low inventory, pending payments, or discrepancies in tank counts.
+4. Reporting System
+* Daily Reports:
+   * Delivery Boy Report:
+      * Tanks delivered, tanks collected, payments collected (cash/online), pending balances.
+   * Point-wise Report:
+      * Tanks delivered, tanks returned, payment status per point.
+   * Overall Agency Report:
+      * Total sales, total pending payments, inventory status (filled/unfilled tanks).
+* Export Options: Download reports as PDF or Excel files.
+* Filter Options: View reports by date, delivery boy, or point.
+5. Payment Management
+* Support multiple payment modes (cash, online, pending balance).
+* Track pending balances per customer/point with due dates.
+* Send reminders to delivery boys or admin for pending payment

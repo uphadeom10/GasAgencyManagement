@@ -1,0 +1,13 @@
+/* Make sure the body takes the full height and prevents scrolling */
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow-y: hidden;
+    /* overflow: hidden; /* Prevent scrolling on the body */
+  }
+  
+  /* Ensuring the app container fills the entire screen */
+  #root {
+    height: 100%;
+  }
+  

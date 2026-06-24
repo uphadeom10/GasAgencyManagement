@@ -1,0 +1,305 @@
+﻿High-Level Design (HLD) Document
+Project Name: Gas Agency - Gas Agency Management Mobile App
+
+Prepared By: Manik Tambulkar
+Date: April 10, 2025
+Version: 1.0
+________________
+
+
+1. Introduction
+1.1 Purpose
+This High-Level Design (HLD) document outlines the architecture and system design for the Gas Agency mobile application, a solution to streamline gas agency operations. It provides stakeholders with a clear, technical overview of the system’s components, data flow, and deployment strategy, ensuring alignment with business goals and technical feasibility.
+1.2 Scope
+The Gas Agency app will:
+* Enable gas agency owners (Admin), managers, and delivery boys to manage daily operations.
+* Track gas tank inventory (fixed capacity of 600 tanks), deliveries, payments, and generate point-wise, customer-wise, and delivery boy-wise reports.
+* Provide real-time in-app notifications for inventory discrepancies and pending payments.
+* Be hosted on AWS EC2 with a Spring Boot backend and PostgreSQL database.
+1.3 Team
+* Gas Agency Stakeholders (Owner/Admin)
+* Team (Backend developers , frontend developers, Business analyst, System architecture, Project Manager)
+* Potential Investors
+________________
+
+
+2. Business Requirements
+* Objective: Develop a mobile application to manage gas tank sales, deliveries, payments, and reporting for a gas agency.
+* Target Users:
+   * Admin (Owner): Full control over users, inventory, points, customers, and reports.
+   * Manager: Monitors operations, manages inventory, points, and customers; views reports.
+   * Delivery Boy: Logs deliveries, tank exchanges, and payment details in real-time.
+* Core Features:
+   * Inventory tracking (600 tanks daily, filled vs. unfilled and products as well).
+   * Delivery management (pre-registered points, tank in/out, payment logging).
+   * Payment processing (cash, online via external apps, pending balances).
+   * Reporting (daily, point-wise, customer-wise, delivery boy-wise; PDF export).
+   * In-app notifications (popups and dashboard alerts).
+________________
+
+
+3. System Architecture Overview
+The Gas Agency app follows a client-server architecture with a mobile frontend, a RESTful backend, and a relational database, hosted on AWS EC2. The design prioritizes real-time data syncing, security, and scalability.
+3.1 High-Level Architecture Diagram
+
+
+[Mobile Devices - React Native App]
+   | Admin | Manager | Delivery Boy |
+   |-----------------------------|
+   | HTTPS (REST API Calls)      |
+   | JWT Authentication          |
+[Spring Boot Backend - AWS EC2]
+   | Modules:                    |
+   | - Authentication (JWT)      |
+         | - User Management                      |
+   | - Inventory Management      |
+   | - Delivery Management       |
+   | - Payment Tracking          |
+   | - Reporting (PDF Export)    |
+   | - Notifications (In-App)    |
+   |-----------------------------|
+   | JPA/Hibernate             |
+[PostgreSQL Database]
+   | Tables:                   
+   | - users       
+   | - mt_status
+   | - mt_points
+   | - mt_customer
+   | - mt_products_category
+   | - mt_products
+        | - mt_service_type
+   | - live_inventory_stocks                                                         
+| - daily_assignment
+   | - daily_delivery   
+| - service_request     
+| - daily_closer_by_delivery_boy                                                              
+   | - daily_closer_confimation            
+   | - requests_for_flow                 
+   | - daily_reports_updates
+| - notification_status
+| - EOD_confimation               
+
+
+* Frontend: React Native app with role-based interfaces.
+* Backend: Spring Boot on AWS EC2, handling business logic and API endpoints.
+* Database: PostgreSQL for persistent storage.
+* Communication: HTTPS REST APIs with JWT authentication.
+________________
+
+
+4. System Components
+Component
+	Technology
+	Description
+	Mobile Frontend
+	React Native
+	Cross-platform app (iOS/Android) with role-based UIs for Admin, Manager, and Delivery Boy.
+	Backend
+	Spring Boot
+	RESTful APIs for all features, hosted on AWS EC2.
+	Authentication
+	Spring Security + JWT
+	Secure login with role-based access control (Admin, Manager, Delivery Boy).
+	Database
+	PostgreSQL
+	Stores data
+	
+
+	
+
+	
+
+	Notifications
+	In-App Custom Logic
+	Popups and dashboard alerts for inventory issues and pending payments.
+	Hosting
+	AWS EC2
+	Cloud hosting for backend and database 
+	________________
+
+
+5. Data Flow
+1. User Authentication:
+   * Admin creates Manager/Delivery Boy accounts with credentials.
+   * User logs in via React Native app → Spring Boot validates credentials → Issues JWT token.
+2. Delivery Workflow:
+   * Delivery Boy selects a delivery point → Enters filled tanks delivered, unfilled tanks collected, and payment mode (cash/online/pending) → Submits data via REST API → Backend updates PostgreSQL.
+3. Inventory Tracking:
+   * Backend maintains real-time count of filled/unfilled tanks (total) → Triggers in-app notification if discrepancy detected.
+4. Reporting:
+   * Admin/Manager requests report → Backend queries PostgreSQL → Generates PDF → Returns to app for download.
+5. Notifications:
+   * Backend detects low inventory or pending payments → Sends in-app alert (popup/dashboard) to Admin/Manager.
+________________
+
+
+6.  Database Design (Bird's Eye View)
+6.1 Logical Schema
+Table
+	Key Fields
+	Description
+	users
+	id, username, password, role_id, created_by
+	Stores Admin, Manager, and Delivery Boy details with roles and creator info.
+	mt_status
+	id, status_name, description
+	Master table for statuses (e.g., filled/unfilled, delivered, pending).
+	mt_points
+	id, name, address, created_by
+	Master list of delivery points (replaces delivery_points).
+	mt_customer
+	id, name, contact, created_by
+	Master table linking customers 
+	mt_products_category
+	id, category_name, description
+	Categories for gas-related products (e.g., tank sizes, accessories).
+	mt_products
+	id, category_id, name, capacity, unit_price
+	Specific products (e.g., 5kg tank, 10kg tank) with details.
+	mt_service_type
+	id, service_name, description
+	Types of services (e.g., delivery, refill, repair).
+	live_inventory_stocks
+	id, product_id,quantity, location
+	Real-time tracking of inventory
+	daily_assignment
+	id, boy_id, product_id, qty_assigned, date
+	Daily tasks assigned to Delivery Boys 
+	daily_delivery
+	id, assignment_id, point_id, filled_in, unfilled_out, timestamp
+	Logs deliveries (tanks delivered/collected per assignment).
+	service_request
+	id, customer_id, service_type_id, status_id, timestamp
+	Customer requests (e.g., refill, replacement).
+	daily_closer_by_delivery_boy
+	id, boy_id, delivery_id, payment_mode, amount, timestamp
+	Delivery Boy’s end-of-day submission (delivery + payment details).
+	daily_closer_confirmation
+	id, closer_id, confirmed_by, status_id, timestamp
+	Admin/Manager confirms Delivery Boy’s daily closure.
+	requests_for_flow
+	id, request_id, next_action, assigned_to, status_id
+	Workflow for service requests (e.g., assigned to Delivery Boy).
+	daily_reports_updates
+	id, type, date, data (JSON), file_path
+	Stores report metadata (point-wise, customer-wise, delivery boy-wise).
+	notification_status
+	id, type, message, user_id, is_read, timestamp
+	Tracks in-app notifications (e.g., low inventory, pending payments).
+	EOD_confirmation
+	id, date, confirmed_by, status_id, timestamp
+	End-of-day confirmation by Admin/Manager for all operations.
+	6.2 Relationships
+* users → daily_assignment (many-to-1): Delivery Boys are assigned daily tasks.
+* mt_points → daily_assignment (many-to-1): Delivery points are assigned to Delivery Boys.
+* mt_products → live_inventory_stocks (many-to-1): Products (e.g., tanks) are tracked in inventory with statuses from mt_status.
+* daily_assignment → daily_delivery (many-to-1): Each assignment results in multiple delivery transactions.
+* daily_delivery → daily_closer_by_delivery_boy (1-to-1): Each delivery is closed by the Delivery Boy with payment details.
+* daily_closer_by_delivery_boy → daily_closer_confirmation (1-to-1): Closures are confirmed by Admin/Manager.
+* mt_customer → service_request (many-to-1): Customers raise service requests.
+* service_request → requests_for_flow (many-to-1): Requests trigger a workflow (e.g., assign to Delivery Boy).
+* live_inventory_stocks → daily_delivery (many-to-many): Tracks which tanks move in deliveries.
+* daily_delivery → daily_reports_updates (many-to-one): Delivery data feeds into daily reports.
+* notification_status → users (many-to-one): Notifications are targeted to specific users (Admin/Manager).
+* EOD_confirmation → daily_closer_confirmation (many-to-1): EOD process confirms all daily closures.
+________________
+
+
+7. Network Topology
+* Mobile Devices: Connect to AWS EC2-hosted backend via HTTPS over the internet.
+* AWS EC2 Instance:
+   * Hosts Spring Boot application (port 8080).
+   * PostgreSQL runs on same EC2 instance or separate RDS 
+* Communication Links: REST API calls secured with JWT tokens.
+________________
+
+
+8. Security Considerations
+* Authentication: Spring Security with JWT tokens; passwords hashed (BCrypt).
+* Authorization: Role-based access (Admin: full access; Manager: limited; Delivery Boy: delivery-only).
+* Data Transmission: HTTPS encrypts all API calls.
+* EC2 Security: Firewall rules restrict access to authorized ports only.
+________________
+
+
+9. Scalability & Performance
+* Current Design: Monolithic Spring Boot app on a single EC2 instance, suitable for initial load.
+* Performance:
+   * Pagination for large reports.
+   * Indexing on deliveries and payments tables for fast lookups.
+________________
+
+
+10. Reporting & Analytics
+10.1 Report Types
+1. Point-Wise Report:
+   * Tanks delivered (filled) and returned (unfilled).
+   * Payment mode (cash, online, pending).
+   * Pending balances per point/customer.
+2. Customer-Wise Report:
+   * Total tanks delivered.
+   * Payment breakdown (cash, online, pending).
+   * Pending dues with amounts.
+3. Delivery Boy-Wise Report:
+   * Tanks delivered and collected.
+   * Payments collected (cash, online, pending totals).
+________________
+
+
+11. Notifications
+* Type: In-app only (no SMS/push).
+* UX: Popups for immediate alerts + dashboard banners for persistent visibility.
+* Triggers:
+   * Tank count mismatch (filled + unfilled ≠ 600).
+   * Pending payments exceed a threshold (configurable).
+
+
+________________
+
+
+12. Assumptions & Constraints
+* Assumptions:
+   * Internet connectivity is always available (no offline mode).
+   * Payment is tracked manually (no gateway integration).
+   * Initial deployment on a single EC2 instance.
+   * No Fixed daily tank capacity of 600.
+   * No external notification services.
+________________
+
+
+13. Integration Points
+* None currently (no SMS, payment gateways, or third-party APIs).
+________________
+
+
+14. Monitoring & Maintenance
+* Logs: Spring Boot logs stored on EC2.
+* Health Checks: Spring Actuator endpoints (/actuator/health).
+________________
+
+
+15. Branding & UX
+* App Name: Gas Agency.
+* UI Design:
+   * Simple, role-based screens in React Native.
+   * Splash screen with Gas Agency branding.
+   * Notifications as popups + dashboard alerts.
+________________
+
+
+16. Risks & Mitigation
+Risk
+	Impact
+	Mitigation
+	
+
+	
+
+	
+
+	Inventory miscount
+	Operational chaos
+	Real-time validation + alerts.
+	JWT token compromise
+	Security breach
+	Short-lived tokens; refresh mechanism.
