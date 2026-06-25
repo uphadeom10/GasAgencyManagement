@@ -2,12 +2,12 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useAuth } from '../../auth/AuthProvider';
+import logopath from '../../assets/gas-cylinder.png';
 
 const TopNavbar = ({ isMobile = false, onMenuClick }) => {
   const { token, user, logOut} = useAuth();
   const role = user?.role || 'Guest';
   const username = user?.name || 'Guest';
-  const logopath = '../src/assets/gas-cylinder.png';
   const handlelogout = async () => {
     try {
       await logOut();
@@ -68,7 +68,7 @@ const TopNavbar = ({ isMobile = false, onMenuClick }) => {
           <ul className="navbar-nav">
             <li className="nav-item dropdown">
               <a
-              
+
                 className="nav-link dropdown-toggle d-flex align-items-center"
                 href="#"
                 id="navbarDropdown"
@@ -129,7 +129,7 @@ const TopNavbar = ({ isMobile = false, onMenuClick }) => {
                 </li>
                 <li><hr className="dropdown-divider my-2" style={{ borderColor: 'rgba(255,255,255,0.1)' }} /></li>
                 <li>
-                  <a className="dropdown-item d-flex align-items-center" onClick={handlelogout} 
+                  <a className="dropdown-item d-flex align-items-center" onClick={handlelogout}
                     style={{ color: 'white', padding: '10px 15px' }}
                     onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
                     onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}

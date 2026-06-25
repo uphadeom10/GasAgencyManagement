@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
-import { 
-  FiUser, FiMail, FiPhone, FiMapPin, 
+import {
+  FiUser, FiMail, FiPhone, FiMapPin,
   FiLock, FiCreditCard, FiBell, FiShield,
   FiClock, FiTruck, FiCheckCircle, FiEdit, FiPackage, FiCalendar
 } from 'react-icons/fi';
-import { useAuth } from '../../auth/AuthProvider'; 
+import { useAuth } from '../../auth/AuthProvider';
+
+const BASE_URL = import.meta.env.VITE_API_URL || "";
 
 const ProfilePage = () => {
   const [searchParams] = useSearchParams();
@@ -50,7 +52,7 @@ const ProfilePage = () => {
     const fetchUserData = async () => {
       try {
         const token = sessionStorage.getItem('token');
-        const response = await fetch(`/masters/getUserById/${user?.userId}`, {
+        const response = await fetch(`${BASE_URL}/masters/getUserById/${user?.userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -87,7 +89,7 @@ const ProfilePage = () => {
   const handleSaveChanges = async () => {
     try {
       const token = sessionStorage.getItem('token');
-      const response = await fetch('/masters/createAndUpdateUsers', {
+      const response = await fetch(`${BASE_URL}/masters/createAndUpdateUsers`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -129,7 +131,7 @@ const ProfilePage = () => {
       return;
     }
     try {
-      const response = await fetch('/api/auth/forgot-password', {
+      const response = await fetch(`${BASE_URL}/api/auth/forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -162,7 +164,7 @@ const ProfilePage = () => {
 
   return (
     <div className="container-fluid py-4">
-      <motion.div 
+      <motion.div
         initial="hidden"
         animate="visible"
         variants={containerVariants}
@@ -180,10 +182,10 @@ const ProfilePage = () => {
               <div className="position-relative mx-auto bg-primary rounded-circle d-flex align-items-center justify-content-center" style={{ width: '120px', height: '120px' }}>
                 <FiUser size={50} color="white" />
               </div>
-              
+
               <h3 className="mt-4 mb-1">{formData.firstName} {formData.lastName}</h3>
               <span className="badge bg-primary">{user?.role}</span>
-              
+
               <div className="d-flex justify-content-center gap-3 mt-4">
                 <button className="btn btn-primary" onClick={() => { setActiveTab('profile'); setEditMode(true); setPasswordMode(false); }}>
                   <FiEdit className="me-1" /> Edit Profile
@@ -192,9 +194,9 @@ const ProfilePage = () => {
                   <FiLock className="me-1" /> Change Password
                 </button>
               </div>
-              
+
               <hr className="my-4" />
-              
+
               <div className="text-start">
                 <h6 className="mb-3 text-uppercase text-muted">Account Information</h6>
                 <div className="d-flex align-items-start mb-3">
@@ -414,7 +416,7 @@ const ProfilePage = () => {
               <div className="card-body">
                 <ul className="list-group list-group-flush">
                   {activities.map(activity => (
-                    <motion.li 
+                    <motion.li
                       key={activity.id}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
